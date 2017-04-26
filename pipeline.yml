@@ -1,0 +1,21 @@
+jobs:
+- name: build-concourse-demo-2017
+  plan:
+  - get: concourse-demo-src
+    trigger: true
+  - put: concourse-demo-docker-repo
+    params:
+      build: concourse-demo-src
+
+resources:
+- name: concourse-demo-src
+  type: git
+  source:
+    uri: 	https://github.com/cjsedwards/concoursedemo.git
+    branch: master
+
+- name: concourse-demo-docker-repo
+  type: docker-image
+  source:
+    repository: YOUR_IP_HERE:5000/concourse-demo
+    insecure_registries: [ "YOUR_IP_HERE:5000" ]

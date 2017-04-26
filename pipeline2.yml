@@ -1,0 +1,22 @@
+jobs:
+- name: build-value-uncertainty-game
+  plan:
+  - get: ValueUncertaintyGame
+  - task: build
+    file: ValueUncertaintyGame/build.yml
+  - put: ValueUncertaintyGame-docker-repo
+    params:
+      build: ValueUncertaintyGameBuildResults
+
+resources:
+- name: ValueUncertaintyGame
+  type: git
+  source:
+    uri: 	https://github.com/cjsedwards/ValueUncertaintyGame.git
+    branch: concoursedemo
+
+- name: ValueUncertaintyGame-docker-repo
+  type: docker-image
+  source:
+    repository: YOUR_IP_HERE:5000/valueuncertaintygame
+    insecure_registries: [ "YOUR_IP_HERE:5000" ]

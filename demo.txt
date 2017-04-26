@@ -1,0 +1,38 @@
+Steps:
+
+Build and run "Hello World" apache server
+docker build . -t my-apache
+docker run -d -p 8080:80 my-apache
+
+On Mac: Some additional setup you might need to add to Docker->Preferences->Daemon->Advanced
+{
+  "storage-driver" : "aufs",
+  "insecure-registries" : [
+    "YOUR_IP_HERE:5000"
+  ]
+}
+
+Startup Concourse containers:
+docker-compose up -d
+
+go to http://localhost:8080
+
+./fly -t lite login -c http://YOUR_IP_HERE:8080
+
+./fly -t lite set-pipeline -p hello-world -c hey_listen.yml
+
+-> Update insecure_registries
+
+./fly -t lite set-pipeline -p concourse-demo -c pipeline.yml
+
+-> Run a build
+
+docker pull YOUR_IP_HERE:5000/concourse-demo
+docker run -d -p 80:80 YOUR_IP_HERE:5000/concourse-demo
+
+-> Show building task
+../../fly -t lite execute -c build.yml
+
+./fly -t lite set-pipeline -p value-uncertainty-game -c pipeline2.yml
+
+docker run 192.168.0.66:5000/valueuncertaintygame
